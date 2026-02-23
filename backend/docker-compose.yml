@@ -1,4 +1,5 @@
 services:
+
   backend:
     build: .
     container_name: todo-backend
@@ -14,8 +15,9 @@ services:
     container_name: todo-mongo
     ports:
       - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
 
-volumes:
-  mongo_data:
+  frontend:
+    build: ../frontend
+    container_name: todo-frontend
+    ports:
+      - "80:80"

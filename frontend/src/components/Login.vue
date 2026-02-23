@@ -1,26 +1,38 @@
 <template>
-    <div class="login-container">
-        <h2>Login Page</h2>
+  <div class="login-container">
+    <h2>Login Page</h2>
 
-        <form @submit.prevent="handleLogin">
-            <input type="email" v-model="form.email" placeholder="Email.." required />
+    <form @submit.prevent="handleLogin">
+      <input
+        type="email"
+        v-model="form.email"
+        placeholder="Email.."
+        autocomplete="email"
+        required
+      />
 
-            <input type="password" v-model="form.password" placeholder="Password.." required />
+      <input
+        type="password"
+        v-model="form.password"
+        placeholder="Password.."
+        autocomplete="current-password"
+        required
+      />
 
-            <button type="submit">Login</button>
-        </form>
+      <button type="submit">Login</button>
+    </form>
 
-        <p>
-            Don't have an account?
-            <router-link to="/register">Register</router-link>
-        </p>
-    </div>
+    <p>
+      Don't have an account?
+      <router-link to="/register">Register</router-link>
+    </p>
+  </div>
 </template>
 
 <script setup>
 import { reactive } from "vue";
-import axios from "axios";
 import { useRouter } from "vue-router";
+import api from "@/api/api";
 
 const router = useRouter();
 
@@ -31,7 +43,7 @@ const form = reactive({
 
 const handleLogin = async () => {
     try {
-        const res = await axios.post("http://localhost:5000/api/user/login", {
+        const res = await api.post("/user/login", {
             email: form.email,
             password: form.password,
         });

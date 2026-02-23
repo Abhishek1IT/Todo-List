@@ -1,30 +1,54 @@
 <template>
-    <div class="register-container">
-        <h2>Create Account</h2>
+  <div class="register-container">
+    <h2>Create Account</h2>
 
-        <form @submit.prevent="handleRegister">
-            <input type="text" v-model="form.name" placeholder="Full Name" required />
+    <form @submit.prevent="handleRegister">
+      <input
+        type="text"
+        v-model="form.name"
+        placeholder="Full Name"
+        autocomplete="name"
+        required
+      />
 
-            <input type="email" v-model="form.email" placeholder="Email" required />
+      <input
+        type="email"
+        v-model="form.email"
+        placeholder="Email"
+        autocomplete="email"
+        required
+      />
 
-            <input type="password" v-model="form.password" placeholder="Password" required />
+      <input
+        type="password"
+        v-model="form.password"
+        placeholder="Password"
+        autocomplete="new-password"
+        required
+      />
 
-            <input type="password" v-model="form.confirmPassword" placeholder="Confirm Password" required />
+      <input
+        type="password"
+        v-model="form.confirmPassword"
+        placeholder="Confirm Password"
+        autocomplete="new-password"
+        required
+      />
 
-            <button type="submit">Register</button>
-        </form>
+      <button type="submit">Register</button>
+    </form>
 
-        <p>
-            Already have an account?
-            <router-link to="/login">Login</router-link>
-        </p>
-    </div>
+    <p>
+      Already have an account?
+      <router-link to="/login">Login</router-link>
+    </p>
+  </div>
 </template>
 
 <script setup>
 import { reactive } from "vue";
-import axios from "axios";
 import { useRouter } from "vue-router";
+import api from "@/api/api";
 
 const router = useRouter();
 const form = reactive({
@@ -41,7 +65,7 @@ const handleRegister = async () => {
     }
 
     try {
-        const res = await axios.post("http://localhost:5000/api/user/register", {
+        const res = await api.post("/user/register", {
             name: form.name,
             email: form.email,
             password: form.password,

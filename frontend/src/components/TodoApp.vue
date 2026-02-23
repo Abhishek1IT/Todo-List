@@ -26,8 +26,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import { useRouter } from "vue-router";
+import api from "@/api/api";
 
 const router = useRouter();
 const todos = ref([]);
@@ -36,7 +36,7 @@ const newtask = ref("");
 const fetchTasks = async () => {
     try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/todos", {
+        const res = await api.get("/todos", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -50,7 +50,7 @@ const fetchTasks = async () => {
 const addtask = async () => {
     try {
         const token = localStorage.getItem("token");
-        const res = await axios.post("http://localhost:5000/api/todos", {
+        const res = await api.post("/todos", {
             task: newtask.value,
         }, {
             headers: {
@@ -71,15 +71,13 @@ const edittask = async (id) => {
 
     try {
         const token = localStorage.getItem("token");
-        const res = await axios.put(
-            `http://localhost:5000/api/todos/${id}`,
-            { task: updatedText },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        const res = await api.put(`/todos/${id}`, {
+            task: updatedText,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
         const index = todos.value.findIndex(t => t._id === id);
         todos.value[index] = res.data;
@@ -91,7 +89,7 @@ const edittask = async (id) => {
 const deletetask = async (id) => {
     try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/todos/${id}`, {
+        await api.delete(`/todos/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
