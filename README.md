@@ -144,6 +144,82 @@ docker compose down
 
 ---
 
+## Without Compose
+
+1. Go to backend folder
+
+cd backend
+
+2. Create a Docker network
+
+docker network create todo-net
+
+3. Run MongoDB container
+
+docker run -d \
+ --name todo-mongo \
+ --network todo-net \
+ -p 27017:27017 \
+ mongo:7
+
+4. Set Mongo URL in backend .env
+
+backend/.env
+
+5. Build backend image
+
+docker build -t todo-backend-img .
+
+6. Run backend container
+
+docker run -d \
+ --name todo-backend \
+ --network todo-net \
+ -p 5000:5000 \
+ --env-file .env \
+ todo-backend-img
+
+Backend will be available on:
+
+http://localhost:5000
+
+7. Build frontend image
+
+cd ../frontend
+
+docker build -t todo-frontend-img .
+
+8. Run frontend container
+
+docker run -d \
+ --name todo-frontend \
+ --network todo-net \
+ -p 80:80 \
+ todo-frontend-img
+
+Frontend will be available on:
+
+http://localhost
+
+9. Check running containers
+
+docker ps
+
+You should see:
+
+todo-mongo
+todo-backend
+todo-frontend
+
+10. 🧹 Stop and remove all containers
+
+docker stop todo-frontend todo-backend todo-mongo
+docker rm todo-frontend todo-backend todo-mongo
+
+(Optional) remove network:
+
+docker network rm todo-net
+
 ## 💡 Important note for other laptops
 
 On another laptop:
@@ -162,3 +238,32 @@ cd backend
 docker compose up --build
 
 That’s all.
+
+## Show MongoDB databases (inside Docker)
+
+1. Make sure containers are running:
+
+```bash
+docker compose up -d
+
+2. Enter Mongo container shell:
+
+docker exec -it todo-mongo mongosh
+
+3. Show all databases:
+
+show dbs
+
+4. Use project database:
+
+use todoApp
+
+5. Show collections:
+
+show collections
+
+6. View data
+
+db.users.find().pretty()
+db.todos.find().pretty()
+```
